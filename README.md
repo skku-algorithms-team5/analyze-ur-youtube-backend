@@ -9,14 +9,12 @@ Analyze your YouYube video.
 ## Backend
 
 - python 3.11.6
-- pipenv 2023.10.24
 
 # How to Run
 
 ## Backend
 
 ```zsh
-pip install pipenv
-pipenv install
-pipenv run uvicorn main:app --reload
+pip install -r requirements.txt
+uvicorn main:app --reload
 ```
