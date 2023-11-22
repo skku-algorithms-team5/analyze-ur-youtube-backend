@@ -8,8 +8,8 @@ Analyze your YouYube video.
 
 ## Backend
 
-- python 3.12.0
-- pipenv 2023.11.15
+- python 3.11.6
+- pipenv 2023.10.24
 
 # How to Run
 
