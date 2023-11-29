@@ -1,15 +1,36 @@
-from typing import Union
+from fastapi import FastAPI, HTTPException
+from dotenv import load_dotenv
+import os
+from youtube_processing import extract_video_id, get_comments, initialize_youtube_client
+from analyzer import CommentAnalyzer
+import prompt
 
-from fastapi import FastAPI
+# Load environment variables
+load_dotenv()
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")  # YouTube API Key
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # OpenAI API Key
 
+# Initialize FastAPI
 app = FastAPI()
 
+# Initialize YouTube and OpenAI clients
+youtube = initialize_youtube_client(YOUTUBE_API_KEY)
+comment_analyzer = CommentAnalyzer(api_key=OPENAI_API_KEY, prompt=prompt.PROMPT)
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
 
+@app.get("/analyze")
+async def analyze_youtube_comments(url: str):
+    video_id = extract_video_id(url)
+    if not video_id:
+        raise HTTPException(status_code=400, detail="Invalid YouTube URL")
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+    comments_with_likes = get_comments(youtube, video_id)
+    if not comments_with_likes:
+        raise HTTPException(status_code=404, detail="No comments found for this video")
+
+    # Generate answer using AnswerGenerator with comments and likes
+    answer = comment_analyzer.get_answer(comments_with_likes)
+
+    print(answer)
+
+    return {"answer": answer}
