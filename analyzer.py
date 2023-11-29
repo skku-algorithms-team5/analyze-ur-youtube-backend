@@ -30,6 +30,3 @@ class CommentAnalyzer:
         except Exception as e:
             print(f"Error occurred: {e}")
             return ""
-        except Exception as e:
-            print(f"Error occurred: {e}")
-            return ""

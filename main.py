@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 from youtube_processing import extract_video_id, get_comments, initialize_youtube_client
 from analyzer import CommentAnalyzer
+from starlette.middleware.cors import CORSMiddleware
 import prompt
 
 # Load environment variables
@@ -12,6 +13,16 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # OpenAI API Key
 
 # Initialize FastAPI
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Initialize YouTube and OpenAI clients
 youtube = initialize_youtube_client(YOUTUBE_API_KEY)
@@ -28,9 +39,9 @@ async def analyze_youtube_comments(url: str):
     if not comments_with_likes:
         raise HTTPException(status_code=404, detail="No comments found for this video")
 
-    # Generate answer using AnswerGenerator with comments and likes
-    answer = comment_analyzer.get_answer(comments_with_likes)
+    # Generate result using AnswerGenerator with comments and likes
+    result = comment_analyzer.get_answer(comments_with_likes)
 
-    print(answer)
+    print(result)
 
-    return {"answer": answer}
+    return {"result": result}
