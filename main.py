@@ -40,8 +40,11 @@ async def analyze_youtube_comments(url: str):
         raise HTTPException(status_code=404, detail="No comments found for this video")
 
     # Generate result using AnswerGenerator with comments and likes
-    result = comment_analyzer.get_answer(comments_with_likes)
-
+    result = (
+        comment_analyzer.get_answer(comments_with_likes)
+        .strip("````json\n")
+        .strip("\n````")
+    )
     print(result)
 
     return {"result": result}
