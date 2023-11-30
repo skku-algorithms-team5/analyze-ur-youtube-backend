@@ -8,7 +8,9 @@ Analyze your YouYube video.
 
 ## Backend
 
-- python 3.11.6
+- python version: `3.11.6`
+- package manager: `pip`
+- framework: `fastapi`
 
 # How to Run
 
@@ -18,5 +20,3 @@ Analyze your YouYube video.
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
-
-## test
