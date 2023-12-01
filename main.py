@@ -49,3 +49,8 @@ async def analyze_youtube_comments(url: str):
     write_to_file("answer2.txt", result)
 
     return {"result": result}
+
+
+@app.get("/test")
+async def test():
+    return {"result": "Hello, World!"}
