@@ -6,12 +6,10 @@ from analyzer import CommentAnalyzer
 from starlette.middleware.cors import CORSMiddleware
 import prompt
 
-# Load environment variables
 load_dotenv()
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")  # YouTube API Key
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # OpenAI API Key
+YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# Initialize FastAPI
 app = FastAPI()
 
 origins = ["*"]
@@ -24,9 +22,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize YouTube and OpenAI clients
 youtube = initialize_youtube_client(YOUTUBE_API_KEY)
 comment_analyzer = CommentAnalyzer(api_key=OPENAI_API_KEY, prompt=prompt.PROMPT)
+
+
+def write_to_file(filename, content):
+    with open(filename, "w", encoding="utf-8") as file:
+        file.write(content)
 
 
 @app.get("/analyze")
@@ -36,12 +38,14 @@ async def analyze_youtube_comments(url: str):
         raise HTTPException(status_code=400, detail="Invalid YouTube URL")
 
     comments_with_likes = get_comments(youtube, video_id)
+
     if not comments_with_likes:
         raise HTTPException(status_code=404, detail="No comments found for this video")
 
-    # Generate result using AnswerGenerator with comments and likes
-    result = comment_analyzer.get_answer(comments_with_likes)
+    combined_text = "\n".join(comments_with_likes)
+    write_to_file("comments2.txt", combined_text)
 
-    print(result)
+    result = comment_analyzer.get_answer(combined_text)
+    write_to_file("answer2.txt", result)
 
     return {"result": result}
