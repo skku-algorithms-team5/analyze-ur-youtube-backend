@@ -20,3 +20,11 @@ Analyze your YouYube video.
 pip install -r requirements.txt
 uvicorn main:app --host=0.0.0.0 --port=8000
 ```
+
+# How to Run Stress Test with Locust
+
+```zsh
+pip install -r requirements.txt
+uvicorn main:app --host=0.0.0.0 --port=8000
+locust -f test.py
+```
