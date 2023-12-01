@@ -11,12 +11,7 @@ class CommentAnalyzer:
         self.prompt = prompt
 
     def get_answer(self, comments_with_likes):
-        comments_text = "\n".join(
-            [
-                f"Comment: {comment['comment']}, Likes: {comment['likes']}"
-                for comment in comments_with_likes
-            ]
-        )
+        comments_text = "\n".join(comments_with_likes)
 
         try:
             response = openai.ChatCompletion.create(
