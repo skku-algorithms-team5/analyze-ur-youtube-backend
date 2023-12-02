@@ -1,7 +1,12 @@
-from locust import HttpUser, task, between
+from locust import HttpUser, task, TaskSet
 
 
-class WebsiteUser(HttpUser):
+class MainBehavior(TaskSet):
     @task
-    def hello_world(self):
-        self.client.get("/test")
+    def main_task(self):
+        self.client.get("/mocking_analyze")
+
+
+class LocustUser(HttpUser):
+    host = "http://0.0.0.0:8000"
+    tasks = [MainBehavior]

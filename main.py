@@ -5,6 +5,7 @@ from youtube_processing import extract_video_id, get_comments, initialize_youtub
 from analyzer import CommentAnalyzer
 from starlette.middleware.cors import CORSMiddleware
 import prompt
+import asyncio
 
 load_dotenv()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
@@ -54,3 +55,12 @@ async def analyze_youtube_comments(url: str):
 @app.get("/test")
 async def test():
     return {"result": "Hello, World!"}
+
+
+@app.get("/mocking_analyze")
+async def mocking_analyze():
+    print("openai api mocking...waiting")
+    # IO Bound 작업을 mocking
+    await asyncio.sleep(130)
+    print("openai api mocked successfully")
+    return {"result": "mocking api test"}
