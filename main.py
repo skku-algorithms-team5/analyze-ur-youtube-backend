@@ -5,7 +5,7 @@ from youtube_processing import extract_video_id, get_comments, initialize_youtub
 from analyzer import CommentAnalyzer
 from starlette.middleware.cors import CORSMiddleware
 import prompt
-import asyncio
+import asyncio, time
 
 load_dotenv()
 YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
@@ -32,6 +32,12 @@ def write_to_file(filename, content):
         file.write(content)
 
 
+@app.get("/async_will_block")
+async def async_will_block():
+    time.sleep(10)
+    return []
+
+
 @app.get("/analyze")
 async def analyze_youtube_comments(url: str):
     video_id = extract_video_id(url)
@@ -44,9 +50,11 @@ async def analyze_youtube_comments(url: str):
         raise HTTPException(status_code=404, detail="No comments found for this video")
 
     combined_text = "\n".join(comments_with_likes)
+    print(combined_text)
     write_to_file("comments2.txt", combined_text)
 
     result = comment_analyzer.get_answer(combined_text)
+    print(result)
     write_to_file("answer2.txt", result)
 
     return {"result": result}
