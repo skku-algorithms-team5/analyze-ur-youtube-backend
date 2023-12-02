@@ -39,7 +39,7 @@ async def async_will_block():
 
 
 @app.get("/analyze")
-async def analyze_youtube_comments(url: str):
+def analyze_youtube_comments(url: str):
     video_id = extract_video_id(url)
     if not video_id:
         raise HTTPException(status_code=400, detail="Invalid YouTube URL")
