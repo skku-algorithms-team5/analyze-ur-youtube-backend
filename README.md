@@ -30,3 +30,10 @@ locust -f test.py
 ```
 
 locust web uri: http://localhost:8089
+
+# format python code before commit, pr
+
+```zsh
+pip install -r requirements.txt
+black .
+```
