@@ -48,3 +48,4 @@ watchfiles==0.21.0
 websockets==12.0
 yarl==1.9.3
 locust==2.19.1
+black==23.11.0
