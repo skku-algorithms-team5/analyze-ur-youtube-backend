@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 import os
 from youtube_processing import extract_video_id, get_comments, initialize_youtube_client
@@ -58,6 +59,26 @@ def analyze_youtube_comments(url: str):
     write_to_file("answer2.txt", result)
 
     return {"result": result}
+
+
+@app.get("/stream_analyze")
+def stream_analyze_youtube_comments(url: str):
+    video_id = extract_video_id(url)
+    if not video_id:
+        raise HTTPException(status_code=400, detail="Invalid YouTube URL")
+
+    comments_with_likes = get_comments(youtube, video_id)
+
+    if not comments_with_likes:
+        raise HTTPException(status_code=404, detail="No comments found for this video")
+
+    combined_text = "\n".join(comments_with_likes)
+    print(combined_text)
+    write_to_file("comments2.txt", combined_text)
+
+    return StreamingResponse(
+        comment_analyzer.stream_answer(combined_text), media_type="text/event-stream"
+    )
 
 
 @app.get("/mocking_analyze")
