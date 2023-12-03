@@ -25,3 +25,23 @@ class CommentAnalyzer:
         except Exception as e:
             print(f"Error occurred: {e}")
             return ""
+
+    def stream_answer(self, comments_with_likes):
+        comments_text = "\n".join(comments_with_likes)
+
+        try:
+            response_stream = openai.ChatCompletion.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": self.prompt},
+                    {"role": "user", "content": comments_text},
+                ],
+                stream=True,
+            )
+            for event in response_stream:
+                if "content" in event["choices"][0].delta:
+                    current_response = event["choices"][0].delta.content
+                    yield current_response
+        except Exception as e:
+            print(f"Error occurred: {e}")
+            return ""
