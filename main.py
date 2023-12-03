@@ -60,11 +60,6 @@ def analyze_youtube_comments(url: str):
     return {"result": result}
 
 
-@app.get("/test")
-async def test():
-    return {"result": "Hello, World!"}
-
-
 @app.get("/mocking_analyze")
 async def mocking_analyze():
     print("openai api mocking...waiting")
