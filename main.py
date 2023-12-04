@@ -15,7 +15,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 app = FastAPI()
 
 origins = [
-    "*",
+    "https://analyze-ur-youtube-frontend.vercel.app",
     "http://localhost:3000",
     "http://localhost:8000",
     "http://localhost:8080",
