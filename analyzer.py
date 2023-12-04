@@ -41,7 +41,7 @@ class CommentAnalyzer:
             for event in response_stream:
                 if "content" in event["choices"][0].delta:
                     current_response = event["choices"][0].delta.content
-                    yield current_response
+                    yield "data: " + current_response + "\n\n"
         except Exception as e:
             print(f"Error occurred: {e}")
             return ""
