@@ -14,7 +14,12 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 app = FastAPI()
 
-origins = ["*"]
+origins = [
+    "*",
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://localhost:8080",
+]
 
 app.add_middleware(
     CORSMiddleware,
