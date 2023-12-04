@@ -31,7 +31,7 @@ locust -f test.py
 
 locust web uri: http://localhost:8089
 
-# format python code before commit, pr
+# Format Python Code before Commit and PR
 
 ```zsh
 pip install -r requirements.txt
