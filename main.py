@@ -135,9 +135,7 @@ async def mocking_stream_analyze():
     async def stream_event_generator():
         for line in TEST_STREAM_RESULT.splitlines():
             for char in line:
-                yield char
+                yield "data: " + char + "\n\n"
                 await asyncio.sleep(0.1)
-            yield "\n"
-            await asyncio.sleep(0.1)
 
     return StreamingResponse(stream_event_generator(), media_type="text/event-stream")
