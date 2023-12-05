@@ -2,6 +2,13 @@ from googleapiclient.discovery import build
 
 
 def extract_video_id(url):
+    # 쇼츠일 때 처리
+    if "shorts/" in url:
+        print("shorts")
+        parts = url.split("shorts/")
+        if len(parts) > 1:
+            return parts[1].split("?")[0]
+        return None
     parts = url.split("watch?v=")
     if len(parts) > 1:
         return parts[1].split("&")[0]
